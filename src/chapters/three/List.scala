@@ -1,8 +1,11 @@
-sealed trait List[+A]
-case object Nil extends List[Nothing] // data constructor for `List`
-case class Cons[+A](head: A, tail: List[A]) extends List[A]
+package chapters.three
 
 object List {
+
+  sealed trait List[+A]
+  case object Nil extends List[Nothing] // data constructor for `List`
+  case class Cons[+A](head: A, tail: List[A]) extends List[A]
+
   def sum(ints: List[Int]): Int = ints match { // Pattern matching example
     case Nil => 0
     case Cons(x,xs) => x + sum(xs)
@@ -101,7 +104,6 @@ object List {
     case Cons(x, xs) => f(x, foldRight(xs, z)(f))
   }
 
-  // Fold Left
   def foldLeft[A, B](list: List[A], z: B)(f: (B, A) => B): B = list match {
     case Nil => z
     case Cons(x, xs) => foldLeft(xs, f(z, x))(f)
@@ -126,38 +128,60 @@ object List {
   def reverse[A](list: List[A]): List[A] = {
     foldLeft(list, List[A]())((acc, h) => Cons(h, acc))
   }
+
+  def concat[A](lists: List[List[A]]): List[A] = {
+    foldRight(lists, List[A]())(append)
+  }
+
+  def map[A, B](l: List[A])(f: A => B): List[B] = l match {
+    case Nil => Nil
+    case Cons(x, xs) => Cons(f(x), map(xs)(f))
+  }
+
+  def mapRight[A, B](l: List[A])(f: A => B): List[B] = {
+    ???
+  }
+
+  def filter[A, B](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(x, xs) if (f(x)) => Cons(x, filter(xs)(f))
+  }
+
+  def main(args: Array[String]) {
+
+    val nums = List(1, 2, 3, 4, 5, 10, 25)
+    val noms = List(10, 20, 60, 8, 1265)
+    val nilnums = List()
+    tail(nums)
+    tail(nilnums)
+    //List.drop3(nums, 3)
+    dropWhile(nums)(_ % 5 != 0)
+    //List.setHead(nums)(100)
+    //List.init(nums)
+    sum2(nums)
+    //List.product2(nums)
+    //List.length(nums)
+    //List.sum3(nums)
+    //List.product3(nums)
+    //List.length(nums)
+    //List.reverse(nums)
+    appendLeft(nums, noms)
+    appendRight(nums, noms)
+    foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _))
+
+    val mapped = map(nums)(_ + 10)
+    println(mapped)
+
+  }
 }
 
 
 
-val nums = List(1, 2, 3, 4, 5, 10, 25)
-val noms = List(10, 20, 60, 8, 1265)
-val nilnums = List()
-List.tail(nums)
-List.tail(nilnums)
 
-//List.drop3(nums, 3)
 
-List.dropWhile(nums)(_ % 5 != 0)
-//
-//List.setHead(nums)(100)
-//
-//List.init(nums)
 
-List.sum2(nums)
-//
-//List.product2(nums)
-//
-//List.length(nums)
-//
-//List.sum3(nums)
-//
-//List.product3(nums)
-//
-//List.length(nums)
-//
-//List.reverse(nums)
 
-List.appendLeft(nums, noms)
-List.appendRight(nums, noms)
-List.foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _))
+
+
+
+
