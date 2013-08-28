@@ -139,49 +139,50 @@ object List {
   }
 
   def mapRight[A, B](l: List[A])(f: A => B): List[B] = {
-    ???
+    foldRight(l, List[B]())((x, y) => Cons(f(x), y))
   }
 
-  def filter[A, B](l: List[A])(f: A => Boolean): List[A] = l match {
-    case Nil => Nil
-    case Cons(x, xs) if (f(x)) => Cons(x, filter(xs)(f))
+  def mapLeft[A, B](l: List[A])(f: A => B): List[B] = {
+    reverse(foldLeft(l, List[B]())((x, y) => Cons(f(y), x)))
+  }
+
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = {
+    reverse(foldLeft(l, List[A]())((x, y) => if (f(y)) Cons(y, x) else x))
+  }
+
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] = {
+    ???
   }
 
   def main(args: Array[String]) {
 
     val nums = List(1, 2, 3, 4, 5, 10, 25)
     val noms = List(10, 20, 60, 8, 1265)
+    val names = List("hi", "lo", "death")
     val nilnums = List()
-    tail(nums)
-    tail(nilnums)
-    //List.drop3(nums, 3)
-    dropWhile(nums)(_ % 5 != 0)
-    //List.setHead(nums)(100)
-    //List.init(nums)
-    sum2(nums)
-    //List.product2(nums)
-    //List.length(nums)
-    //List.sum3(nums)
-    //List.product3(nums)
-    //List.length(nums)
-    //List.reverse(nums)
-    appendLeft(nums, noms)
-    appendRight(nums, noms)
-    foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _))
 
-    val mapped = map(nums)(_ + 10)
-    println(mapped)
+    println(tail(nums))
+    println(tail(nilnums))
+    println(drop3(nums, 3))
+    println(dropWhile(nums)(_ % 5 != 0))
+    println(setHead(nums, 100))
+    println(init(nums))
+    println(sum2(nums))
+    println(product2(nums))
+    println(length(nums))
+    println(sum3(nums))
+    println(product3(nums))
+    println(length(nums))
+    println(reverse(nums))
+    println(appendLeft(nums, noms))
+    println(appendRight(nums, noms))
+    println(foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _)))
+    println("map: " + map(nums)(_ + 10))
+    println("mapRight: " + mapRight(nums)(_ + 10))
+    println("mapLeft: " + mapLeft(nums)(_ + 10))
+    println(map(names)(_ + " blob"))
+    println("filter: " + filter(nums)(_ % 2 == 0))
+    println("flatMap: " + flatMap(nums)(i => List(i, i)))
 
   }
 }
-
-
-
-
-
-
-
-
-
-
-
