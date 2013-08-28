@@ -87,11 +87,12 @@ object List {
     case Cons(x, xs) => Cons(x, init(xs))
   }
 
-  // foldRight takes type A and B
-  // foldRight curries so it:
-  //   * takes a list and an initial val
-  //   * then takes a function with types A and B and returns B
-  //   * finally foldRight returns a B
+  /**
+   * list: the list of type A to process
+   * z: initial element of type B
+   * f: a function that take an element of type A and B, and after processing,
+   *    returns a new value of type B
+   */
   def foldRight[A, B](list: List[A], z: B)(f: (A, B) => B): B = list match {
     // base case returns a z: B
     case Nil => z
@@ -109,6 +110,11 @@ object List {
   def appendLeft[A](list1: List[A], list2: List[A]): List[A] = list1 match {
     case Nil => list2
     case Cons(x, xs) => foldLeft(list1, list2)((list2, list1) => Cons(x, xs))
+  }
+
+  def appendRight[A](list1: List[A], list2: List[A]): List[A] = list1 match {
+    case Nil => list2
+    case Cons(x, xs) => foldRight(list1, list2)((_, list2) => Cons(x, xs))
   }
 
   def sum2(list: List[Int]) = foldRight(list, 10)(_ + _)
@@ -153,3 +159,5 @@ List.sum2(nums)
 //List.reverse(nums)
 
 List.appendLeft(nums, noms)
+List.appendRight(nums, noms)
+List.foldRight(List(1,2,3), Nil: List[Int])(Cons(_, _))

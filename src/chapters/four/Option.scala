@@ -20,9 +20,7 @@ object Option extends App {
       case None => ob
       case _ => this
     }
-    def orElse_2[B >: A](ob: => Option[B]): Option[B] = {
-
-    }
+    def orElse_2[B >: A](ob: => Option[B]): Option[B] = ???
     def orElseWithMap[B >: A](ob: => Option[B]): Option[B] = {
       this map(Some(_)) getOrElse ob
     }
